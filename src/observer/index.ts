@@ -40,7 +40,7 @@ function defineReactive(obj: Object, key: PropertyKey, val: any): Dep {
   return dep;
 }
 
-function observe(placeholder: any): Observer {
+export default function observe(placeholder: any): Observer {
   const ob = new Observer(placeholder);
   return ob;
 }

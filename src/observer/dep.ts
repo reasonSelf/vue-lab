@@ -30,8 +30,19 @@ export default class Dep {
     })
   }
 
-  addSub(sub: Watcher) {
+  addSub(sub: DepTarget) {
     this.subs.push(sub);
+  }
+
+  removeSub(subID: number) {
+    let targetIndex = 0;
+    for (; targetIndex < this.subs.length; ++targetIndex) {
+      const currentSub = this.subs[targetIndex];
+      if (currentSub.id === subID) break;
+    }
+    if (targetIndex < this.subs.length) {
+      this.subs.splice(targetIndex, 1);
+    }
   }
 }
 

@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "AMD",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "moduleResolution":"node",
-    "outDir": "./lib",
+    "outFile": "./lib/vue-lab.js"
   },
   "include": ["src"],
   "exclude": ["node_modules", "**/__tests__/*"]
