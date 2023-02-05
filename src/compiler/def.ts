@@ -4,6 +4,7 @@ export default class AST {
   tag: string
   textContent: string
   attr: Array<[string, string]>
+  parent: AST
   children: Array<AST>
   isComponent: boolean
 
@@ -28,5 +29,18 @@ export default class AST {
     } else {
       return new AST(tempTag, '', [], [], true);
     }
+  }
+
+  addAttr(attr: [string, string]) {
+    this.attr.push(attr);
+  }
+
+  addChild(child: AST) {
+    child.parent = this;
+    this.children.push(child);
+  }
+
+  addTextContent(content: string) {
+    this.textContent = content;
   }
 }
