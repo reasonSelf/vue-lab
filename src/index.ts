@@ -1,6 +1,6 @@
 import ob from './observer/index'
 
-
-class Vue {
+export default class Vue {
+  name: string
   
 }
