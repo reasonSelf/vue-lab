@@ -13,7 +13,7 @@ export default class Watcher implements DepTarget {
 
   constructor(
     context: any,
-    expOrFunc: String | Function,
+    expOrFunc: string | Function,
     callback: Function
   ) {
     this.context = context
