@@ -1,4 +1,4 @@
-const ignoreCharList = [' ', '/n'];
+const ignoreCharList = [' ', '\n'];
 const ignoreCharSet = new Set(ignoreCharList);
 
 function isChar(c: string): boolean {
@@ -14,9 +14,7 @@ export default {
   validNormalChar: function(c: string): boolean {
     if (c.length !== 1) return false;
     return isChar(c) || isNumber(c);
-  },
-
-  
+  }
 }
 
 export function vaildIgnoreChar(c: string): boolean {

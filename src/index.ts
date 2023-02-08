@@ -5,5 +5,13 @@ export default class Vue {
   name: string
 }
 
-const template = '<div><div class="fillColor" id="welcome">Hello world</div></div>'
+const template = `
+  <div class="hello" id="test">
+    <div>
+      Hello world!
+      <span>Bo zeng</span>
+    </div>
+  </div>
+`
+
 console.log(compile(template));

@@ -1,38 +1,40 @@
 import vaildTagIsNative from "../util/tagVaild"
 
+const typeDef = ['', 'element', 'text', 'comment'];
+const emptyName = 'template';
+
 export default class AST {
-  tag: string
+  type: number
+  tagName: string
   attr: Array<[string, string]>
   parent: AST
   children: Array<AST>
-  isComponent: boolean
   textContent: string
 
   constructor(
-    tag: string,
+    type: number,
+    tagName: string,
     attr: Array<[string, string]> = [],
     children: Array<AST> = [],
-    isComponent: boolean = false,
     textContent = ''
   ) {
-    this.tag = tag;
+    this.type = type;
+    this.tagName = tagName;
     this.attr = attr;
     this.children = children;
-    this.isComponent = isComponent;
-    this.textContent = '';
+    this.textContent = textContent;
   }
 
-  static generateASTByTag(tag: string): AST {
-    const tempTag = tag.toLocaleLowerCase();
-    if (vaildTagIsNative(tempTag)) {
-      return new AST(tempTag, [], [], false);
-    } else {
-      return new AST(tempTag, [], [], true);
-    }
+  static createEmptyAST(): AST {
+    return new AST(1, emptyName);
+  }
+
+  static generateASTByTag(tagName: string): AST {
+    return new AST(1, tagName);
   }
 
   static generateText(data: string): AST {
-    return new AST('', [], [], false, data);
+    return new AST(2, '', [], [], data);
   }
 
   addAttr(attr: [string, string]) {

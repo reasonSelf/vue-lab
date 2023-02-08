@@ -1,70 +1,110 @@
 import AST from './def';
+import { vaildIgnoreChar } from '../util/index';
 
 export default function compile(template: string): AST {
-  const stack: Array<AST> = [];
-  let index = 0, currentText = '';
-  while (index < template.length) {
-    const c = template[index];
-    if (c === '<') {
-      textHook();
-      currentText = '';
-      tagHookDispathcer();
+  const tempAST = AST.createEmptyAST();
+  const stack: Array<AST> = [tempAST];
+  let index = 0, text = '';
+
+  // todo
+  // valid template
+
+  while (index < template.length && template[index] !== '<') index++;
+
+  elementHook();
+
+  return tempAST.children[0];
+
+  // function set
+
+  function elementHook() {
+    if (index >= template.length) return;
+    preHandler();
+
+    if (template[index + 1] === '/') {
+      while (index < template.length && template[index] !== '>') index++;
+      stack.pop();
     } else {
-      currentText += c;
-      index++;
+      const tagName = getTagName();
+      const ast = AST.generateASTByTag(tagName);
+      const parent = getParent();
+      parent.addChild(ast);
+      stack.push(ast);
+      getAttr(ast);
     }
-  }
-
-  function tagHookDispathcer() {
-    const nextC = template[++index];
-    if (nextC === '/') {
-      endHook();
-    } else {
-      startHook();
-    }
-  }
-
-  function startHook() {
-    let tagName = '';
-    while (index < template.length && template[index] !== '>' && template[index] !== ' ') tagName += template[index];
-    const currentAST = AST.generateASTByTag(tagName);
-    const parent = stack.length ? stack[stack.length - 1] : null;
-    if (parent) parent.addChild(currentAST);
-    stack.push(currentAST);
-    while (index < template.length && template[index] !== '>') attrHook();
-
-
-    function attrHook() {
-      let key = '', value = '', flg = true;
-      while (index < template.length && template[index] !== '=') {
-        const c = template[index];
-        if (c !== ' ') key += template[index];
-        index++;
-      }
-      index = index + 2;
-      while (index < template.length && template[index] !== '"' && template[index] !== "'") {
-        value += template[index];
-        index++;
-      }
-      currentAST.addAttr([key, value]);
-    }
-  }
-
-  function endHook() {
-    let tagName = '';
     index++;
-    while (index < template.length && template[index] !== '>') {
-      tagName += template[index];
-      index++;      
-    }
-    stack.pop();
-    return;
+    textHook();
   }
 
   function textHook() {
-    if (currentText === '') return;
-    const ast = AST.generateText(currentText);
-    const parent = stack.length ? stack[stack.length - 1] : null;
-    if (parent) parent.addChild(ast);
+    if (index >= template.length) return;
+    while (index < template.length) {
+      const c = template[index];
+      if (c === '<') break;
+      if (vaildIgnoreChar(c) || text) {
+        text += c;
+      } else {
+        text += c;
+      }
+      index++;
+    }
+    elementHook();
+  }
+
+  function preHandler() {
+    if (text === '') return;
+    const ast = AST.generateText(text);
+    const parent = getParent();
+    parent.addChild(ast);
+    text = '';
+  }
+
+  function getTagName(): string {
+    let name = '';
+    while (index < template.length && template[index] !== ' ' && template[index] !== '>') {
+      const c = template[index];
+      if (c !== '<') name += c;
+      index++;
+    }
+    return name;
+  }
+
+  function getAttr(paramAst: AST) {
+    while (index < template.length && template[index] !== '>') {
+      const name = getName();
+      const value = getValue();
+      if (name && value) {
+        paramAst.addAttr([name, value]);
+      }
+      index++;
+    }
+
+    function getName(): string {
+      let name = '';
+      while (index < template.length) {
+        const c = template[index];
+        if (c === '>') return name;
+        if (c === '=') break;
+        if (!vaildIgnoreChar(c)) name += c;
+        index++;
+      }
+      return name;
+    }
+
+    function getValue(): string {
+      if (template[index] === '>') return '';
+      let value = '';
+      while (index < template.length) {
+        const c = template[index++];
+        if (c === '>') return value;
+        if (c === '"' || c === "'") break;
+      }
+      while (index < template.length && template[index] !== '"' && template[index] !== "'") value += template[index++];
+      return value;
+    }
+  }
+
+  function getParent() {
+    return stack[stack.length - 1];
   }
 }
