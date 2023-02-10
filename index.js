@@ -33,9 +33,10 @@ wathcerList.forEach(file => {
         return;
       }
       console.log(`stdout: ${stdout}`);
+      console.log('running on "./test/index.html"');
     })
   })
 })
 
 console.clear();
-console.log('running.......');
+console.log('running on "./test/index.html"');

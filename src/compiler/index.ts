@@ -41,11 +41,10 @@ export default function compile(template: string): AST {
     while (index < template.length) {
       const c = template[index];
       if (c === '<') break;
-      if (vaildIgnoreChar(c) || text) {
+      const isIgnoreChar = vaildIgnoreChar(c);
+      if (!isIgnoreChar || text) {
         text += c;
-      } else {
-        text += c;
-      }
+      } 
       index++;
     }
     elementHook();

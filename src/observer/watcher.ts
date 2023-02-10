@@ -49,6 +49,7 @@ export default class Watcher implements DepTarget {
     const oldVal = this.value;
     this.value = this.get();
 
+    // async (todo);
     if (typeof this.callback === 'function') {
       this.callback.call(this.context, this.value, oldVal);
     }

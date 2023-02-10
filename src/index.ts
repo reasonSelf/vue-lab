@@ -1,4 +1,4 @@
-import ob from './observer/index';
+import observe from './observer/index';
 import compile from './compiler';
 
 export default class Vue {
@@ -6,10 +6,9 @@ export default class Vue {
 }
 
 const template = `
-  <div class="hello" id="test">
-    <div>
-      Hello world!
-      <span>Bo zeng</span>
+  <div class="wrapper" id="test">
+    <div class="text">
+      Hello <b>{{ name }}</b>
     </div>
   </div>
 `
