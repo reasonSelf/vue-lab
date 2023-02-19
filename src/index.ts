@@ -6,7 +6,7 @@ export default class Vue {
 }
 
 const template = `
-  <div class="wrapper" id="test">
+  <div class="wrapper space" @click="fffff" id="test">
     <div class="text">
       Hello <b>{{ name }}</b>
     </div>

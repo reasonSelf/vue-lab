@@ -38,5 +38,16 @@ wathcerList.forEach(file => {
   })
 })
 
-console.clear();
-console.log('running on "./test/index.html"');
+exec('npm run build', (error, stdout, stderr) => {
+  console.clear();
+  if (error) {
+    console.log(`error: ${error.message}`);
+    return ;
+  }
+  if (stderr) {
+    console.log(`stderr: ${stderr}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+  console.log('running on "./test/index.html"');
+})
