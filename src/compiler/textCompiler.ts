@@ -52,6 +52,14 @@ export default class TextCompiler implements CompilerInterface {
     return this.commonHook('-');
   }
 
+  atHook(): boolean {
+    return this.commonHook('@');
+  }
+
+  colonHook(): boolean {
+    return this.commonHook(':');
+  }
+
   commonHook(c: string): boolean {
     if (c.length !== 1) throw new Error();
     if (!vaildIgnoreChar(c) || this.text) {

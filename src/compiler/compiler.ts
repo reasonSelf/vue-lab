@@ -11,5 +11,7 @@ export default interface CompilerInterface {
   quotationHook(): boolean;
   slashHook(): boolean;
   hyphenHook(): boolean;
+  atHook(): boolean;
+  colonHook(): boolean;
   commonHook(c: string): boolean;
 }

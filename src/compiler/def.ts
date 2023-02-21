@@ -13,6 +13,9 @@ export default class AST {
   children: Array<AST>
   textContent: string
   events: [string, string][]
+  bindings: [string, string][]
+  instIf: any
+  instFor: any
 
   constructor(
     type: number,
@@ -25,8 +28,12 @@ export default class AST {
     this.tagName = tagName;
     this.attr = [];
     this.children = [];
-    this.events = [];
     this.textContent = textContent;
+
+    this.instIf = null;
+    this.instFor = null;
+    this.events = [];
+    this.bindings = [];
   }
 
   static createEmptyAST(): AST {
@@ -44,6 +51,36 @@ export default class AST {
 
   static generateText(data: string): AST {
     return new AST(2, '', false, data);
+  }
+  
+  setInstruction(key: string, expOrFunc: any): boolean {
+    switch(key) {
+      case 'v-bind':
+        break;
+      case 'v-on':
+        break;
+      case 'v-if':
+        return this.setInstValue('instIf', expOrFunc);
+      case 'v-for':
+        return this.setInstValue('instFor', expOrFunc);
+    }
+    return true;
+  }
+  setInstValue(
+    key: 'instIf' | 'instFor',
+    expOrFunc: any
+  ): boolean {
+    if (this[key] !== null) return false;
+    this[key] = expOrFunc;
+    return true;
+  }
+
+  addEvent(event: string, func: string) {
+    this.events.push([event, func]);
+  }
+
+  addBinding(binding: string, expOrFunc: string) {
+    this.bindings.push([binding, expOrFunc]);
   }
 
   addAttr(attr: [string, string]) {

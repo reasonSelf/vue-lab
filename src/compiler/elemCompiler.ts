@@ -100,7 +100,23 @@ export default class ElemCompiler implements CompilerInterface {
     } else {
       this.attrValue = this.text;
       const ast = this.getTopElem();
-      ast.addAttr([this.attrName, this.attrValue]);
+
+      switch(this.attrType) {
+        case 0:
+          ast.addAttr([this.attrName, this.attrValue]);
+          break;
+        case 1:
+          const res = ast.setInstruction(this.attrName, this.attrValue);
+          if (!res) throw new Error();
+          break;
+        case 2:
+          ast.addEvent(this.attrName, this.text);
+          break;
+        case 3:
+          ast.addBinding(this.attrName, this.text);
+          break;
+      }
+      
       this.resetAttrState();
       this.text = '';
     }
@@ -118,7 +134,23 @@ export default class ElemCompiler implements CompilerInterface {
   }
 
   hyphenHook(): boolean {
-    throw new Error("Method not implemented.");
+    if (this.text.length === 1 && this.text === 'v') {
+      this.attrType = 1;
+    }
+    this.commonHook('-');
+    return true;
+  }
+
+  atHook(): boolean {
+    if (!this.created || this.text.length !== 0) throw new Error();
+    this.attrType = 2;
+    return true;
+  }
+
+  colonHook(): boolean {
+    if (!this.created || this.text.length !== 0) throw new Error();
+    this.attrType = 3;
+    return true;
   }
 
   commonHook(c: string): boolean {

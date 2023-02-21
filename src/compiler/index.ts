@@ -51,6 +51,12 @@ export default function compile(template: string): AST {
         case '/':
           compilers[type].slashHook();
           break;
+        case '@':
+          compilers[type].atHook();
+          break;
+        case ':':
+          compilers[type].colonHook();
+          break;
         default:
           compilers[type].commonHook(c);
           break;
