@@ -16,6 +16,7 @@ export default class AST {
   bindings: [string, string][]
   instIf: any
   instFor: any
+  instShow: any
 
   constructor(
     type: number,
@@ -32,6 +33,7 @@ export default class AST {
 
     this.instIf = null;
     this.instFor = null;
+    this.instShow = null;
     this.events = [];
     this.bindings = [];
   }
@@ -63,11 +65,13 @@ export default class AST {
         return this.setInstValue('instIf', expOrFunc);
       case 'v-for':
         return this.setInstValue('instFor', expOrFunc);
+      case 'v-show':
+        return this.setInstValue('instShow', expOrFunc);
     }
     return true;
   }
   setInstValue(
-    key: 'instIf' | 'instFor',
+    key: 'instIf' | 'instFor' | 'instShow',
     expOrFunc: any
   ): boolean {
     if (this[key] !== null) return false;
