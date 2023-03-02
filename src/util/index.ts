@@ -21,3 +21,9 @@ export function vaildIgnoreChar(c: string): boolean {
   if (c.length !== 1) return false;
   return ignoreCharSet.has(c);
 }
+
+export function evalWidthCatch(context: any, expOrFunc: any): boolean {
+  let res = false;
+
+  return res;
+}

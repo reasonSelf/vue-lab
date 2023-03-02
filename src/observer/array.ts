@@ -1,3 +1,5 @@
+import Dep from "./dep";
+
 const arrayProto = Array.prototype;
 export const arrayMethods = Object.create(arrayProto);
 
@@ -10,19 +12,21 @@ const proxyMethods = [
   'sort',
   'reverse'
 ]
+const proxyMethodsSet: Set<string | Symbol> = new Set(...proxyMethods);
 
-proxyMethods.forEach(name => {
-  const originMehtod = arrayMethods[name];
-
-  arrayMethods[name] = function m(...args: any[]) {
-    originMehtod.apply(this, args);
-    let inserted
-    switch (name) {
-      case 'push':
-      case 'unshift':
-        inserted = args;
-      case 'splice':
-        inserted = args.slice(2); 
+export default function arrayProxy(array: any) {
+  const dep = new Dep();
+  const proxy = new Proxy(array, {
+    get(target, p, receiver) {
+      dep.depend();
+      return Reflect.get(target, p, receiver);
+    },
+    set(target, p, newVal, receiver) {
+      if (proxyMethodsSet.has(p)) {
+        dep.notify();
+      }
+      return Reflect.set(target, p, newVal, receiver);
     }
-  }
-})
+  });
+  return proxy;
+}
