@@ -1,5 +1,6 @@
 import observe from './observer/index';
 import compile from './compiler';
+import codeGen from './compiler/codeGen';
 
 export default class Vue {
   name: string
@@ -13,4 +14,6 @@ const template = `
   </div>
 `
 
-console.log(compile(template));
+const ast = compile(template);
+const render = codeGen(ast);
+render();

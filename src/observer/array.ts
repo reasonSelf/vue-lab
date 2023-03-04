@@ -18,7 +18,9 @@ export default function arrayProxy(array: any) {
   const dep = new Dep();
   const proxy = new Proxy(array, {
     get(target, p, receiver) {
-      dep.depend();
+      if (p !== 'length') {
+        dep.depend();
+      }
       return Reflect.get(target, p, receiver);
     },
     set(target, p, newVal, receiver) {
