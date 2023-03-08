@@ -7,8 +7,8 @@ export default class Vue {
 }
 
 const template = `
-  <div v-if="xxx" data-id="333" class="wrapper space" :data="data" @click="clickHandler" id="test">
-    <div class="text" v-for="data of xxxx">
+  <div v-if="testIf" data-id="333" class="wrapper space" :data="data" @click="clickHandler" id="test">
+    <div class="text" v-for="data of testFor">
       Hello <b>{{ name }}</b>
     </div>
   </div>

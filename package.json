@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@types/node": "^18.11.18",
+    "remove-strict-webpack-plugin": "^0.1.2",
     "ts-loader": "^9.4.2"
   }
 }
