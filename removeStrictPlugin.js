@@ -15,7 +15,11 @@ class RemoveStrictPlugin {
           additionalAssets: true
         }, 
         (assets) => {
-          Object.entries(assets).forEach(([pathname, source], index) => {
+          Object.entries(assets).forEach(([pathname, source]) => {
+            // sourcemap(todo)
+            // const sourceMap = source.map();
+            // const fixedSource = new sources.SourceMapSource(stream, pathname, sourceMap.sourcesContent);
+            
             const stream = removeStrict(source.source());
             compilation.updateAsset(                
               pathname,
