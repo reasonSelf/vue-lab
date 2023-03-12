@@ -7,6 +7,7 @@ export default class AST {
   type: number
   tagName: string
   isNative: boolean
+  isStatic: boolean
   // attr: Array<[string, string]>
   attr: [string, string][]
   parent: AST
@@ -22,10 +23,12 @@ export default class AST {
     type: number,
     tagName: string,
     isNative: boolean,
-    textContent = ''
+    textContent = '',
+    isStatic: boolean = true
   ) {
     this.type = type;
     this.isNative = isNative;
+    this.isStatic = isStatic;
     this.tagName = tagName;
     this.attr = [];
     this.children = [];
@@ -42,17 +45,17 @@ export default class AST {
     return new AST(1, emptyName, false);
   }
 
-  static generateASTByTag(tagName: string): AST {
+  static generateASTByTag(tagName: string, isStatic: boolean = true): AST {
     const flg = vaildTagIsNative(tagName);
     if (flg) {
-      return new AST(1, tagName, false);
+      return new AST(1, tagName, false, '', isStatic);
     } else {
-      return new AST(1, tagName, true);
+      return new AST(1, tagName, true, '', isStatic);
     }
   }
 
-  static generateText(data: string): AST {
-    return new AST(2, '', false, data);
+  static generateText(data: string, isStatic: boolean = true): AST {
+    return new AST(2, '', false, data, isStatic);
   }
   
   setInstruction(key: string, expOrFunc: any): boolean {

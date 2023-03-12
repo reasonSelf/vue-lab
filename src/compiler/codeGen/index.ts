@@ -1,10 +1,16 @@
-import VNode from "../../types/vnode";
+import VNode, { createVnode } from "../../types/vnode";
 import AST from "../def";
 
-export default function codeGen(ast: AST) {
-
+export default function codeGen(ast: AST, forRendered: boolean = false) {
+  let item: string = null, target: string = null;
+  if (!forRendered && ast.instFor) {
+    const splitArr: string[] = ast.instFor.split(' ');
+    if (splitArr.length !== 3) throw new SyntaxError();
+    item = splitArr[0];
+    target = splitArr[2];
+  }
   
-  return function render(): VNode[] {
+  return function render(forScope = {}): VNode[] {
     if (ast.instIf) {
       try {
         const res = eval(`with(this){${ast.instIf}}`);
@@ -16,17 +22,25 @@ export default function codeGen(ast: AST) {
     }
     
     const nodeList: VNode[] = [];
-    if (ast.instFor) {
-      
+    if (!forRendered && ast.instFor) {
+      const code = `
+        for (${item} of ${target}) {
+          const scope = {${item}};
+          const childrenList = codeGen(ast, true).call(this, scope);
+        }
+      `
+      eval(`with(this) {${code}}`);
     } else {
-      const node = new VNode(ast.tagName);
+      const node = createVnode(ast);
 
       ast.children.forEach(child => {
-        const childrenList = codeGen.apply(this, child);
-        childrenList.forEach((item: VNode) => node.addChild(item));
+        const childrenList: VNode[] = codeGen(child, forRendered).call(this, forScope);
+        childrenList.forEach(childNode => {
+          node.addChild(childNode);
+        })
       });
       
-      if (!ast.instShow) {
+      if (ast.instShow) {
         const res = eval(`with(this)(${ast.instShow})`);
         if (!res) {
           node.style.display = 'none';

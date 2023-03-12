@@ -13,5 +13,7 @@ export default interface CompilerInterface {
   hyphenHook(): boolean;
   atHook(): boolean;
   colonHook(): boolean;
+  openCurlyHook(): boolean;
+  closeCurlyHook(): boolean;
   commonHook(c: string): boolean;
 }

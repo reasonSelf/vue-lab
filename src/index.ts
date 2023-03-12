@@ -6,14 +6,26 @@ export default class Vue {
   name: string
 }
 
+// const template = `
+//   <div>
+//     <div>Hello World!</div>
+//     <div v-if="testIf" v-for="item in testFor">bo zeng</div>
+//   </div>
+// `
+
 const template = `
-  <div v-if="testIf" data-id="333" class="wrapper space" :data="data" @click="clickHandler" id="test">
-    <div class="text" v-for="data of testFor">
-      Hello <b>{{ name }}</b>
-    </div>
+  <div>
+    <div>hello { testName }</div>
+    <div @change="test"></div>
   </div>
 `
 
 const ast = compile(template);
-const render = codeGen(ast);
-render();
+console.log(ast);
+// const obj = {
+//   testIf: true,
+//   testFor: ['hello', 'world'],
+//   render: codeGen(ast)
+// }
+// console.log(obj.render());
+

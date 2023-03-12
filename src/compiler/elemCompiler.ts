@@ -153,6 +153,14 @@ export default class ElemCompiler implements CompilerInterface {
     return true;
   }
 
+  openCurlyHook(): boolean {
+    return this.commonHook('{');
+  }
+
+  closeCurlyHook(): boolean {
+    return this.commonHook('}');
+  }
+
   commonHook(c: string): boolean {
     if (c.length !== 1) throw new Error();
     this.text += c;

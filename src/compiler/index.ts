@@ -57,6 +57,12 @@ export default function compile(template: string): AST {
         case ':':
           compilers[type].colonHook();
           break;
+        case '{':
+          compilers[type].openCurlyHook();
+          break;
+        case '}':
+          compilers[type].closeCurlyHook();
+          break;
         default:
           compilers[type].commonHook(c);
           break;
