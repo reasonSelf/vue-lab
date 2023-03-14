@@ -1,6 +1,4 @@
-import AST from "../compiler/def"
-
-const typeDef = ['', 'element', 'text', 'comment'];
+import { ELEMENT_TYPE, TEXT_TYPE } from "../compiler/def"
 
 export default class VNode {
   tag: string
@@ -26,7 +24,12 @@ export default class VNode {
   }
 }
 
-export function createVnode(ast: AST): VNode {
-  const node = new VNode(ast.tagName, ast.textContent, ast.type);
+export function createElemVNode(tagName: string): VNode {
+  const node = new VNode(tagName, '', ELEMENT_TYPE);
+  return node;
+}
+
+export function createTextVNode(textContent: string): VNode {
+  const node = new VNode('', textContent, TEXT_TYPE);
   return node;
 }

@@ -1,31 +1,15 @@
-import observe from './observer/index';
-import compile from './compiler';
-import codeGen from './compiler/codeGen';
-
-export default class Vue {
-  name: string
-}
-
-// const template = `
-//   <div>
-//     <div>Hello World!</div>
-//     <div v-if="testIf" v-for="item in testFor">bo zeng</div>
-//   </div>
-// `
+import Yue from './types/yue';
 
 const template = `
   <div>
     <div>hello { testName }</div>
-    <div @change="test"></div>
+    <div @change="test" v-show="show"></div>
   </div>
 `
 
-const ast = compile(template);
-console.log(ast);
-// const obj = {
-//   testIf: true,
-//   testFor: ['hello', 'world'],
-//   render: codeGen(ast)
-// }
-// console.log(obj.render());
+const app = new Yue({
+  template
+})
+app.render();
 
+console.log(app);

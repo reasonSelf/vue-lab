@@ -1,6 +1,8 @@
 import vaildTagIsNative from "../util/tagVaild"
 
-const typeDef = ['', 'element', 'text', 'comment'];
+export const ELEMENT_TYPE = 1;
+export const TEXT_TYPE = 2;
+export const COMMENT_TYPE = 3;
 const emptyName = 'template';
 
 export default class AST {

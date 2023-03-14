@@ -1,5 +1,5 @@
-import VNode, { createVnode } from "../../types/vnode";
-import AST from "../def";
+import VNode, { createElemVNode, createTextVNode } from "../../types/vnode";
+import AST, { ELEMENT_TYPE, TEXT_TYPE } from "../def";
 
 export default function codeGen(ast: AST, forRendered: boolean = false) {
   let item: string = null, target: string = null;
@@ -14,6 +14,7 @@ export default function codeGen(ast: AST, forRendered: boolean = false) {
     if (ast.instIf) {
       try {
         const res = eval(`with(this){${ast.instIf}}`);
+        if (typeof res !== 'boolean') throw new SyntaxError();
         if (!res) return [];
       } catch(e) {
         console.error(e);
@@ -31,8 +32,23 @@ export default function codeGen(ast: AST, forRendered: boolean = false) {
       `
       eval(`with(this) {${code}}`);
     } else {
-      const node = createVnode(ast);
-
+      let node: VNode = null;
+      if (ast.type === ELEMENT_TYPE) {
+        node = createElemVNode(ast.tagName);
+      } else if (ast.type === TEXT_TYPE) {
+        let text = ast.textContent;
+        if (!ast.isStatic) {
+          text = eval(`
+            with(this) {
+              with(forScope) {
+                eval(ast.textContent);
+              }
+            }
+          `)
+        }
+        node = createTextVNode(text);
+      }
+      
       ast.children.forEach(child => {
         const childrenList: VNode[] = codeGen(child, forRendered).call(this, forScope);
         childrenList.forEach(childNode => {
@@ -42,6 +58,7 @@ export default function codeGen(ast: AST, forRendered: boolean = false) {
       
       if (ast.instShow) {
         const res = eval(`with(this)(${ast.instShow})`);
+        if (typeof res !== 'boolean') throw new SyntaxError();
         if (!res) {
           node.style.display = 'none';
         } else {
