@@ -34,21 +34,6 @@ function defineProxy(placeholder: Object) {
   return proxy;
 }
 
-function proxy(target: any, source: any) {
-  if (typeof target !== 'object' || typeof source !== 'object') throw new Error();
-
-  Object.keys(source).forEach(key => {
-    Object.defineProperty(target, key, {
-      get() {
-        return source[key];
-      },
-      set(newVal) {
-        source[key] = newVal;
-      }
-    })
-  })
-}
-
 export default function observe(placeholder: any): Observer {
   const ob = new Observer(placeholder);
   return ob;

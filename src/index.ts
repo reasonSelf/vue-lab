@@ -8,8 +8,16 @@ const template = `
 `
 
 const app = new Yue({
-  template
+  template,
+  data() {
+    return {
+      testName: 'yjy',
+      show: true
+    }
+  }
 })
-app.render();
 
-console.log(app);
+setTimeout(() => {
+  const sss = app as { [key in string]: any}
+  sss.testName = 'vczh';
+}, 2000);

@@ -14,7 +14,7 @@ export default class Watcher implements DepTarget {
   constructor(
     context: any,
     expOrFunc: string | Function,
-    callback: Function
+    callback: Function = null
   ) {
     this.context = context
     this.id = uid++;
@@ -33,7 +33,7 @@ export default class Watcher implements DepTarget {
 
   get() {
     pushTarget(this);
-    this.getter();
+    this.getter.call(this.context);
     popTarget();
   }
 

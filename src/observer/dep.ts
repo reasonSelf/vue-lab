@@ -1,5 +1,3 @@
-import Watcher from "./watcher";
-
 let uid = 1;
 
 export interface DepTarget {
@@ -25,9 +23,14 @@ export default class Dep {
   }
 
   notify(): void {
-    this.subs.forEach(sub => {
-      sub.update();
-    })
+    // this.subs.forEach(sub => {
+    //   sub.update();
+    // })
+    setTimeout(() => {
+      this.subs.forEach(sub => {
+        sub.update();
+      })
+    }, 0);
   }
 
   addSub(sub: DepTarget) {
