@@ -1,4 +1,5 @@
 import Dep, { DepTarget, pushTarget, popTarget } from './dep'
+import addUpdateTask from './scheduler';
 
 let uid = 1;
 
@@ -46,13 +47,7 @@ export default class Watcher implements DepTarget {
   }
 
   update(): void {
-    const oldVal = this.value;
-    this.value = this.get();
-
-    // async (todo);
-    if (typeof this.callback === 'function') {
-      this.callback.call(this.context, this.value, oldVal);
-    }
+    addUpdateTask(this);
   }
 
   teardown() {
@@ -60,6 +55,15 @@ export default class Watcher implements DepTarget {
       dep.removeSub(this.id);
     })
     this.depIDs = new Set();
+  }
+
+  run() {
+    const oldVal = this.value;
+    this.value = this.get();
+
+    if (typeof this.callback === 'function') {
+      this.callback.call(this.context, this.value, oldVal);
+    }
   }
 }
 

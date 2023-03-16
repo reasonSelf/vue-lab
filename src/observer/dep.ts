@@ -23,14 +23,9 @@ export default class Dep {
   }
 
   notify(): void {
-    // this.subs.forEach(sub => {
-    //   sub.update();
-    // })
-    setTimeout(() => {
-      this.subs.forEach(sub => {
-        sub.update();
-      })
-    }, 0);
+    this.subs.forEach(sub => {
+      sub.update();
+    })
   }
 
   addSub(sub: DepTarget) {
