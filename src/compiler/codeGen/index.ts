@@ -37,7 +37,6 @@ export default function codeGen(ast: AST, forRendered: boolean = false) {
         node = createElemVNode(ast.tagName);
       } else if (ast.type === TEXT_TYPE) {
         let text = ast.textContent;
-        console.log(this.testName);
         if (!ast.isStatic) {
           text = eval(`
             with(this) {

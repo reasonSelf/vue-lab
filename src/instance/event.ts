@@ -1,5 +1,5 @@
-import Component from "../types/component";
+import Yue from "../types/yue"
 
-export default function initEvent(context: Component) {
-  
+export default function initEvent(context: Yue) {
+  context._event = {};
 }

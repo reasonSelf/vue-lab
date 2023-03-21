@@ -13,24 +13,36 @@ class YueConstruct {
 export default class Yue {
   render: () => VNode[]
   __renderWatcher__: Watcher
+  _event: Object
   currVNode: VNode[]
+  [key: string]: any
+
+  $on: (event: string, handler: Function) => void
+  $off: (event?: string) => void
 
   constructor(cst: YueConstruct = {}) {
     this.currVNode = null;
     this.render = createReneder(cst.template)
+    proxyMethods(this, cst.methods);
     const data = cst.data();
     const ob = observe(data);
     proxyData(this, data, ob.proxy);
     
     this.__renderWatcher__ = new Watcher(this, () => {
       this.currVNode = this.render();
-      console.log(this.currVNode)
     });
   }
 }
 
 function createReneder(template: string) {
   return codeGen(compile(template));
+}
+
+function proxyMethods(context: Yue, methods: Object) {
+  for (const [key, method] of Object.entries(methods)) {
+    if (typeof method !== 'function') throw new SyntaxError(`methods must be function!`);
+    context[key] = method.bind(context);
+  }
 }
 
 function proxyData(context: Yue, source: Object, proxy: { [key in string]: any}) {

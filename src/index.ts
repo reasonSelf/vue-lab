@@ -14,10 +14,16 @@ const app = new Yue({
       testName: 'yjy',
       show: true
     }
+  },
+  methods: {
+    hello() {
+      console.log(`hello ${this.testName}`);
+    }
   }
 })
 
 setTimeout(() => {
   const sss = app as { [key in string]: any}
   sss.testName = 'vczh';
+  app.hello();
 }, 2000);
